@@ -3,11 +3,11 @@ from typing import List
 from sqlalchemy import create_engine, ForeignKey, select
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
-# 1. Base declarativa
+#Base declarativa
 class Base(DeclarativeBase):
     pass
 
-# 2. Modelo Departamento (debe tener __tablename__ = "departamentos")
+# 2. Modelo Departamento 
 class Departamento(Base):
     __tablename__ = "departamentos"
 
@@ -17,7 +17,7 @@ class Departamento(Base):
     # Relación para acceder a la lista de profesores
     profesores: Mapped[List["Profesor"]] = relationship()
 
-# 3. Modelo Profesor (apunta a departamentos.id)
+# Modelo Profesor (apunta a departamentos.id)
 class Profesor(Base):
     __tablename__ = "profesores"
 
@@ -29,11 +29,11 @@ class Profesor(Base):
     # Clave foránea que apunta a la tabla departamentos
     departamento_id: Mapped[int] = mapped_column(ForeignKey("departamentos.id"))
 
-# 4. Creación del motor y las tablas
+# Crear motor y las tablas
 engine = create_engine("sqlite:///universidad.db")
 Base.metadata.create_all(engine)
 
-# 5. Insertar departamento con profesores
+#Insertar departamento con profesores
 with Session(engine) as session:
     depto = Departamento(nombre="Informática")
     session.add(depto)
@@ -44,7 +44,7 @@ with Session(engine) as session:
     session.add_all([p1, p2])
     session.commit()
 
-# 6. Mostrar por consola
+#Mostrar por consola
 with Session(engine) as session:
     deptos = session.scalars(select(Departamento)).all()
     print("=== EJERCICIO 2: Departamentos y Profesores ===")
